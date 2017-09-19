@@ -1,0 +1,63 @@
+﻿@model AccountBook.Models.AccountBook
+@using AccountBook.Helper;
+
+@{
+    ViewBag.Title = "Delete";
+}
+<h3 style="color:red; font-weight:bold;">是否確定刪除記錄 ?</h3>
+<div>
+    <hr />
+
+    <dl class="dl-horizontal" style="font-family: Cambria; font-size: 12pt;">
+        <dt>
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+
+        <dd>
+            @Html.ShowBookType(Model.Category)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Remark)
+        </dt>
+
+        <dd style="word-break: break-all; width: 550px;">
+            @Html.DisplayFor(model => model.Remark)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateDT)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateDT)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('是否確定刪除 ?');" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

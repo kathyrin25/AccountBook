@@ -26,5 +26,6 @@ namespace AccountBook.Models
         }
     
         public virtual DbSet<AccountBook> AccountBook { get; set; }
+
     }
 }

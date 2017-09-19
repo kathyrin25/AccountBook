@@ -1,0 +1,88 @@
+﻿@model AccountBook.Models.ViewModels.EditRecordViewModel
+
+@{
+    ViewBag.Title = "Index";
+
+    int CurrentPage = 1;
+    if (ViewData["CurrentPage"] != null)
+    {
+        CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+    }
+}
+
+
+<link href="~/Scripts/pickadate/themes/default.css" rel="stylesheet" />
+<link href="~/Scripts/pickadate/themes/default.date.css" rel="stylesheet" />
+
+
+<div class="well">
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Category, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EnumDropDownListFor(model => model.Category, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Remark, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.Remark, 5, 100, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Add" class="btn btn-default" onclick="return confirm('是否確定新增 ?');" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="result_List">
+            @Html.Action("List", new { Page = @CurrentPage })
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/CustJS/validator_Number.js"></script>
+    <script src="~/Scripts/CustJS/validator_Date.js"></script>
+
+    <script src="~/Scripts/pickadate/picker.js"></script>
+    <script src="~/Scripts/pickadate/picker.date.js"></script>
+    <script src="~/Scripts/CustJS/SetCalendar.js"></script>
+    <script type="text/javascript">
+            $(function () {
+                SetCalendar_datetimepicker();
+            });
+    </script>
+}
