@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using AccountBook.ValidateAttribute;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace AccountBook.Models
@@ -67,6 +68,7 @@ namespace AccountBook.Models
         [Required]
         [EmailAddress]
         [Display(Name = "電子郵件")]
+        [BanWords("admin@aa.com")]
         public string Email { get; set; }
 
         [Required]

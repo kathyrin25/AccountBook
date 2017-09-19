@@ -177,7 +177,7 @@ namespace AccountBook.Controllers
                     await UserManager.SendEmailAsync(user.Id, "確認您的帳戶", "請按一下此連結確認您的帳戶 <a href=\"" + callbackUrl + "\">這裏</a>");
 
                     //角色名稱
-                    var roleName = "Admin";  //預設為Normal
+                    var roleName = "Normal";  //預設為Normal
 
                     //判斷角色是否存在
                     if (HttpContext.GetOwinContext().Get<ApplicationRoleManager>().RoleExists(roleName) == false)
