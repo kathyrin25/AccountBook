@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using AccountBook.Models;
+using System.Web.Helpers;
 
 namespace AccountBook
 {
@@ -19,6 +20,13 @@ namespace AccountBook
         public Task SendAsync(IdentityMessage message)
         {
             // 將您的電子郵件服務外掛到這裡以傳送電子郵件。
+            WebMail.SmtpPort = 25;
+            WebMail.SmtpServer = "127.0.0.1";
+            WebMail.UserName = "test@xxxxx.co";
+            WebMail.Password = "Password";
+            WebMail.EnableSsl = false;
+            WebMail.From = "test@xxxxx.co";
+            WebMail.Send(message.Destination, message.Subject, message.Body);
             return Task.FromResult(0);
         }
     }
@@ -104,6 +112,20 @@ namespace AccountBook
         public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
         {
             return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
+        }
+    }
+
+    //增加角色管理員相關的設定
+    public class ApplicationRoleManager : RoleManager<IdentityRole>
+    {
+        public ApplicationRoleManager(IRoleStore<IdentityRole, string> roleStore)
+            : base(roleStore)
+        {
+        }
+
+        public static ApplicationRoleManager Create(IdentityFactoryOptions<ApplicationRoleManager> options, IOwinContext context)
+        {
+            return new ApplicationRoleManager(new RoleStore<IdentityRole>(context.Get<ApplicationDbContext>()));
         }
     }
 }

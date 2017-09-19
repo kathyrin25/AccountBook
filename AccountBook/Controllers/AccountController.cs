@@ -67,11 +67,13 @@ namespace AccountBook.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
-        {
+        {            
             if (!ModelState.IsValid)
             {
+                
                 return View(model);
-            }
+            }            
+        
 
             // 這不會計算為帳戶鎖定的登入失敗
             // 若要啟用密碼失敗來觸發帳戶鎖定，請變更為 shouldLockout: true
@@ -79,6 +81,16 @@ namespace AccountBook.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    //檢查是否email已確認
+                    var user = await UserManager.FindByNameAsync(model.Email);
+                    if (user != null)
+                    {
+                        if (!await UserManager.IsEmailConfirmedAsync(user.Id))
+                        {
+                            ModelState.AddModelError("", "登入失試。");
+                            return View(model);
+                        }
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -149,24 +161,40 @@ namespace AccountBook.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // 如需如何啟用帳戶確認和密碼重設的詳細資訊，請造訪 http://go.microsoft.com/fwlink/?LinkID=320771
                     // 傳送包含此連結的電子郵件
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "確認您的帳戶", "請按一下此連結確認您的帳戶 <a href=\"" + callbackUrl + "\">這裏</a>");
+                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    await UserManager.SendEmailAsync(user.Id, "確認您的帳戶", "請按一下此連結確認您的帳戶 <a href=\"" + callbackUrl + "\">這裏</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    //角色名稱
+                    var roleName = "Admin";  //預設為Normal
+
+                    //判斷角色是否存在
+                    if (HttpContext.GetOwinContext().Get<ApplicationRoleManager>().RoleExists(roleName) == false)
+                    {
+                        //角色不存在,建立角色
+                        var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole(roleName);
+                        await HttpContext.GetOwinContext().Get<ApplicationRoleManager>().CreateAsync(role);
+                    }
+                    //將使用者加入該角色
+                    await UserManager.AddToRoleAsync(user.Id, roleName);
+
+                    ViewData["SuccessMessage"] = "請至 mailbox 確認";  
+                    return View(model);
                 }
                 AddErrors(result);
             }
+            
 
             // 如果執行到這裡，發生某項失敗，則重新顯示表單
             return View(model);

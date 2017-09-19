@@ -20,6 +20,7 @@ namespace AccountBook.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Contact()
         {
             ViewBag.Message = "MVC project.";
