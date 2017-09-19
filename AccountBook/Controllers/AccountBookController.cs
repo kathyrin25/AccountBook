@@ -15,6 +15,8 @@ using AccountBook.Models.ViewModels;
 namespace AccountBook.Controllers
 {
     [Authorize]
+    [RoutePrefix("SkillTree")]  /*記帳簿路由改為SkillTree*/
+    [Route("{action=index}")]
     public class AccountBookController : Controller
     {
         private readonly AccountBookService _AccountBookSvc;
@@ -25,6 +27,7 @@ namespace AccountBook.Controllers
             _AccountBookSvc = new AccountBookService(unitOfWork);
         }
 
+        
         public ActionResult Index(int? Page)
         {
             ViewData["CurrentPage"] = Page;

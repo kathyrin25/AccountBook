@@ -13,6 +13,8 @@ namespace AccountBook
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapMvcAttributeRoutes();  /*設定 Attribute Routing，要加入這一行*/
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
