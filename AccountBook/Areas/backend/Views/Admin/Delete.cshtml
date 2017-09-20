@@ -4,11 +4,13 @@
 @{
     ViewBag.Title = "Delete";
 }
-<h3 style="color:red; font-weight:bold;">是否確定刪除記錄 ?</h3>
-<div>
-    <hr />
 
-    <dl class="dl-horizontal" style="font-family: Cambria; font-size: 12pt;">
+<h3 style="color:red; font-weight:bold;">是否確定刪除記錄 ?</h3>
+
+<div>
+    <h4>AccountBook</h4>
+    <hr />
+    <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Category)
         </dt>
@@ -34,6 +36,14 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.Creator)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Creator)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.Remark)
         </dt>
 
@@ -51,12 +61,11 @@
 
     </dl>
 
-    @using (Html.BeginForm())
-    {
+    @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('是否確定刪除 ?');" /> |
+            <input type="submit" value="Delete" class="btn btn-default" /> |
             @Html.ActionLink("Back to List", "Index")
         </div>
     }

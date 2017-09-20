@@ -16,7 +16,7 @@ namespace AccountBook.Controllers
 {
     [Authorize]
     [RoutePrefix("SkillTree")]  /*記帳簿路由改為SkillTree*/
-    [Route("{action=index}")]
+    [Route("{action=Index}")]
     public class AccountBookController : Controller
     {
         private readonly AccountBookService _AccountBookSvc;

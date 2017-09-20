@@ -21,7 +21,7 @@
         <th>
             @Html.DisplayNameFor(model => model.Category)
         </th>
-        <th>
+        <th class="tdAmount">
             @Html.DisplayNameFor(model => model.Amount)
         </th>
         <th>
@@ -50,10 +50,10 @@
                 <td class="@Html.ShowClass(item.Category)">                    
                     @Html.ShowBookType(item.Category)
                 </td>
-                <td>
+                <td class="tdAmount">
                     @Html.DisplayFor(modelItem => item.Amount)
                 </td>
-                <td style="word-break: break-all; width: 550px;">
+                <td class="tdRemark">
                     @Html.DisplayFor(modelItem => item.Remark)
                 </td>
                 <td>

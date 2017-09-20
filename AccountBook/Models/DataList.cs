@@ -6,8 +6,8 @@ using System.Web;
 namespace AccountBook.Models
 {
     public enum BookType
-    {
-        收入,
-        支出
+    {        
+        支出,
+        收入
     }
 }

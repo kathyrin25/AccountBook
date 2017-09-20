@@ -1,14 +1,20 @@
 ﻿@using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
-{
+{    
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
     @Html.AntiForgeryToken()
 
     <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Hello ! " + User.Identity.GetUserName() , "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            @Html.ActionLink("Hello ! " + User.Identity.GetUserName() , "Index", "Manage",null,  htmlAttributes: new { title = "Manage" })
         </li>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <li>@Html.ActionLink("管理", "Index", "Admin", new { area = "backend" }, null)</li>
+        }
+
         <li><a href="javascript:document.getElementById('logoutForm').submit()">登出</a></li>
     </ul>
     }

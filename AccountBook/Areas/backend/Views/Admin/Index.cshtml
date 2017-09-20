@@ -1,0 +1,107 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@using AccountBook.Helper;
+@model QueryOption<AccountBook.Models.AccountBook>
+
+@{
+    ViewBag.Title = "Index";
+    var LineNumber = (Model.Page - 1) * Model.PageSize + 1;
+}
+
+<div class="plist">
+    <div class="well">
+        @using (Html.BeginForm("Index", "Admin", FormMethod.Get, new { role = "search", @class = "form-inline" }))
+        {            
+            @Html.Hidden("column")
+            @Html.Hidden("order")
+            @Html.Hidden("page")   
+            <div class="input-group">
+                <select name="q" id="q" class="form-control">
+                    <option value=""> - 請選擇 - </option>
+                    <option value="0">支出</option>
+                    <option value="1">收入</option>
+                </select>
+                
+                <span class="input-group-btn">
+                <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> Search</button>
+                </span>
+            </div>
+
+        }
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-hover">
+                <tr>
+                    <th>#</th>
+                    <th>
+                        @Html.SortableFor(d => d.Date, "span")
+                    </th>
+                    <th>                       
+                        @Html.SortableFor(d => d.Category, "span")
+                    </th>
+                    <th class="tdAmount">                        
+                        @Html.SortableFor(d => d.Amount, "span")
+                    </th>                    
+                    <th>
+                        @Html.SortableFor(d => d.Creator, "span")
+                    </th>
+                    <th>
+                        @Html.SortableFor(d => d.Remark)
+                    </th>
+                    <th>&nbsp;</th>
+                </tr>                
+
+                @foreach (var item in Model.Result) 
+                {
+                    
+                    <tr>
+                        <td>@(LineNumber++)</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td class="@Html.ShowClass(item.Category)">
+                            @Html.ShowBookType(item.Category)
+                        </td>
+                        <td class="tdAmount">
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>                        
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Creator)
+                        </td>
+                        <td class="tdRemark">
+                            @Html.DisplayFor(modelItem => item.Remark)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Delete", "Delete", "Admin", new { id = item.Id }, new { @class = "btn btn-warning btn-sm" })
+                        </td>
+                    </tr>
+                }
+            </table>
+            <nav>
+                @Html.PagedListPager(Model.Result, d => Url.Action("Index","Admin", new
+           {
+               Area = "backend",
+               q = Model.Keyword,
+               page = d,
+               Model.Column,
+               Model.Order
+           }))
+            </nav>
+        </div>
+    </div>
+</div>
+@section scripts{
+    
+    <script src="~/Scripts/purl.js"></script>
+    <script src="~/Scripts/TypeScript/demoSortable.js"></script>
+    <script>
+        $(document).ready(function () {
+            var sortable = new SkillTreeSortableSample.Sortable($(".plist"));
+
+            $("#q").val(@Model.Keyword);
+        })
+    </script>
+}
+
+
