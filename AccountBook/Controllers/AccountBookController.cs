@@ -144,5 +144,27 @@ namespace AccountBook.Controllers
 
         }
 
+        [Route("Report1")]
+        [Route("Report1/{YY:int}/{MM:int:min(1):max(12)}")]  /*年月收支 http://localhost/SkillTree/Report1/yyyy/mm */
+        public ActionResult ListByYM(int? YY, int? MM)
+        {
+            DateTime sDate = DateTime.Now.AddDays(-DateTime.Now.Day);  //預設帶本月
+
+            if (YY.HasValue && MM.HasValue)
+            {
+                if (!DateTime.TryParse(YY.ToString() + "/" + MM.ToString() + "/01", out sDate))  //格式有誤
+                {
+                    ViewData["errorMsg"] = "參數格式錯誤！格式應為 yyyy/MM (日期年／月)";
+
+                    return View();
+                }
+            }
+
+            DateTime eDate = sDate.AddMonths(1);
+            var result = _AccountBookSvc.Lookup(User.Identity.Name).Where(x => x.Date >= sDate && x.Date < eDate).OrderBy(x => x.Date);
+
+            return View(result);
+        }
+
     }
 }

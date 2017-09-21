@@ -191,6 +191,16 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\CustomHtmlExtensions.cs" />
+    <Compile Include="Helper\UserIdentityExtensions.cs" />
+    <Compile Include="Migrations\201709190332003_InitialCreate.cs" />
+    <Compile Include="Migrations\201709190332003_InitialCreate.Designer.cs">
+      <DependentUpon>201709190332003_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709210126104_Init.cs" />
+    <Compile Include="Migrations\201709210126104_Init.Designer.cs">
+      <DependentUpon>201709210126104_Init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBook.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -373,6 +383,7 @@
     <Content Include="Views\AccountBook\Edit.cshtml" />
     <Content Include="Views\AccountBook\Delete.cshtml" />
     <Content Include="Scripts\TypeScript\demoSortable.js.map" />
+    <Content Include="Views\AccountBook\ListByYM.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -394,6 +405,14 @@
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\purl\purl-jquery.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\purl\purl.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201709190332003_InitialCreate.resx">
+      <DependentUpon>201709190332003_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709210126104_Init.resx">
+      <DependentUpon>201709210126104_Init.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

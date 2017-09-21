@@ -78,6 +78,7 @@ namespace AccountBook.Controllers
             // 這不會計算為帳戶鎖定的登入失敗
             // 若要啟用密碼失敗來觸發帳戶鎖定，請變更為 shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+                     
             switch (result)
             {
                 case SignInStatus.Success:
@@ -88,8 +89,9 @@ namespace AccountBook.Controllers
                         if (!await UserManager.IsEmailConfirmedAsync(user.Id))
                         {
                             ModelState.AddModelError("", "登入失試。");
+                            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie); //登出
                             return View(model);
-                        }
+                        }                        
                     }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
@@ -164,7 +166,7 @@ namespace AccountBook.Controllers
             
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, NickName = model.NickName };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -188,6 +190,7 @@ namespace AccountBook.Controllers
                     }
                     //將使用者加入該角色
                     await UserManager.AddToRoleAsync(user.Id, roleName);
+                    
 
                     ViewData["SuccessMessage"] = "請至 mailbox 確認";  
                     return View(model);

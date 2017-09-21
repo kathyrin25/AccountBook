@@ -1,0 +1,60 @@
+﻿@model IEnumerable<AccountBook.Models.AccountBook>
+
+@{
+    ViewBag.Title = "ListByYM";
+}
+
+@if (Model == null)
+{
+    <div class="alert alert-danger">
+        <strong>Warning!</strong> @ViewData["errorMsg"]
+    </div>
+
+}
+else
+{
+<table class="table table-hover">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Category)
+        </th>
+        <th class="tdAmount">
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>        
+        <th>
+            @Html.DisplayNameFor(model => model.Remark)
+        </th>       
+        <th>
+            @Html.DisplayNameFor(model => model.CreateDT)
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Category)
+        </td>
+        <td class="tdAmount">
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>        
+        <td class="tdRemark">
+            @Html.DisplayFor(modelItem => item.Remark)
+        </td>        
+        <td>
+            @Html.DisplayFor(modelItem => item.CreateDT)
+        </td>
+        
+    </tr>
+}
+
+</table>
+
+}
