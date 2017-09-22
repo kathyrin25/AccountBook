@@ -17,8 +17,9 @@ namespace AccountBook.Models
             // 注意 authenticationType 必須符合 CookieAuthenticationOptions.AuthenticationType 中定義的項目
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
 
-            // 在這裡新增自訂使用者宣告            
-            userIdentity.AddClaim(new Claim("NickName", this.NickName));
+            // 在這裡新增自訂使用者宣告 
+            var nickname = (this.NickName == null) ? "" : this.NickName;
+            userIdentity.AddClaim(new Claim("NickName", nickname));
 
             return userIdentity;
         }

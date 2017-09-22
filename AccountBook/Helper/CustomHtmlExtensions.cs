@@ -1,4 +1,4 @@
-﻿using AccountBook.Models;
+﻿using AccountBook.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,4 +1,5 @@
-﻿using AccountBook.ValidateAttribute;
+﻿using AccountBook.Models.Enums;
+using AccountBook.ValidateAttribute;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

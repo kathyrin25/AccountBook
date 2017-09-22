@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using AccountBook.Models;
+using AccountBook.Models.Enums;
 using AccountBook.Services;
 using AccountBook.Repositories;
 using PagedList;

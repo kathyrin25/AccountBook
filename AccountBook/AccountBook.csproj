@@ -181,6 +181,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\backend\backendAreaRegistration.cs" />
     <Compile Include="Areas\backend\Controllers\AdminController.cs" />
+    <Compile Include="Areas\backend\Controllers\UsersController.cs" />
+    <Compile Include="Areas\backend\Models\UserModel.cs" />
     <Compile Include="Areas\backend\Paging\QueryOption.cs" />
     <Compile Include="Areas\backend\Paging\QueryOptionHtmlExtensions.cs" />
     <Compile Include="Controllers\AccountBookController.cs" />
@@ -190,6 +192,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\CheckBoxListExtensions.cs" />
     <Compile Include="Helper\CustomHtmlExtensions.cs" />
     <Compile Include="Helper\UserIdentityExtensions.cs" />
     <Compile Include="Migrations\201709190332003_InitialCreate.cs" />
@@ -205,7 +208,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\DataList.cs" />
+    <Compile Include="Models\Enums\BookType.cs" />
+    <Compile Include="Models\Enums\Position.cs" />
+    <Compile Include="Models\Enums\UserStatus.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Metadata\AccountBookMetadata.cs" />
@@ -272,6 +277,9 @@
     <Content Include="Areas\backend\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\backend\Views\Admin\Index.cshtml" />
     <Content Include="Areas\backend\Views\Admin\Delete.cshtml" />
+    <Content Include="Areas\backend\Views\Users\Index.cshtml" />
+    <Content Include="Areas\backend\Views\Users\Edit.cshtml" />
+    <Content Include="Areas\backend\Views\Users\View.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\CustJS\SetCalendar.js" />
     <Content Include="Scripts\CustJS\validator_Date.js" />
@@ -384,6 +392,7 @@
     <Content Include="Views\AccountBook\Delete.cshtml" />
     <Content Include="Scripts\TypeScript\demoSortable.js.map" />
     <Content Include="Views\AccountBook\ListByYM.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\CheckBoxList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -397,9 +406,7 @@
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Areas\backend\Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\TypeScript\demoSortable.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />

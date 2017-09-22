@@ -9,6 +9,7 @@ using PagedList;
 using PagedList.Mvc;
 using System.Net;
 
+
 namespace AccountBook.Areas.backend.Controllers
 {
     [Authorize(Roles = "Admin")]
@@ -39,7 +40,7 @@ namespace AccountBook.Areas.backend.Controllers
                 source = source.Where(d => d.Category == category);
             }
 
-            var result = new QueryOption<Models.AccountBook>
+            var result = new QueryOption<AccountBook.Models.AccountBook>
             {
                 Order = order,
                 Column = column,
@@ -60,7 +61,7 @@ namespace AccountBook.Areas.backend.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Models.AccountBook accountBook = _AccountBookSvc.GetSingle(id.Value);
+            AccountBook.Models.AccountBook accountBook = _AccountBookSvc.GetSingle(id.Value);
             if (accountBook == null)
             {
                 return HttpNotFound();
@@ -73,7 +74,7 @@ namespace AccountBook.Areas.backend.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            Models.AccountBook accountBook = _AccountBookSvc.GetSingle(id);
+            AccountBook.Models.AccountBook accountBook = _AccountBookSvc.GetSingle(id);
             _AccountBookSvc.Delete(accountBook);
             _AccountBookSvc.Save();
             return RedirectToAction("Index");
