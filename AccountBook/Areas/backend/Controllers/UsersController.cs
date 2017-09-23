@@ -16,13 +16,49 @@ namespace AccountBook.Areas.backend.Controllers
     [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
+        private ApplicationUserManager _userManager;
+        private ApplicationRoleManager _roleManager;
+        
+        public UsersController()
+        {
+            
+        }
+
+        public UsersController(ApplicationUserManager userManager, ApplicationRoleManager roleManager)
+        {
+            UserManager = userManager;
+            RoleManager = roleManager;            
+        }        
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+
+        public ApplicationRoleManager RoleManager
+        {
+            get
+            {
+                return _roleManager ?? HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
+            }
+            private set
+            {
+                _roleManager = value;
+            }
+        }
 
         private List<SelectListItem> RoleSelectListItems(string selected = "")
         {
             var selectedRoles = string.IsNullOrWhiteSpace(selected) ? null : selected.Split(',');
-            var _RoleManager = this.HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
 
-            var roles = _RoleManager.Roles.OrderBy(x => x.Name);            
+            var roles = RoleManager.Roles.OrderBy(x => x.Name);            
             var Items = new List<SelectListItem>();
             foreach (var role in roles)
             {
@@ -40,14 +76,12 @@ namespace AccountBook.Areas.backend.Controllers
         // GET: backend/Users
         public ActionResult Index()
         {
-            var _RoleManager = this.HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
-            var _UserManager = this.HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            var users = _UserManager.Users.OrderBy(x => x.Email).ToList();
-            
+            var users = UserManager.Users.OrderBy(x => x.Email).ToList();    
+
             var result = new List<UserModel>();
             foreach (var user in users)
             {
-                var selectedRoleNames = from r in _RoleManager.Roles
+                var selectedRoleNames = from r in RoleManager.Roles
                                         where r.Users.Select(u => u.UserId).Contains(user.Id)
                                         select r.Name;
 
@@ -73,17 +107,14 @@ namespace AccountBook.Areas.backend.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var _UserManager = this.HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            var user = _UserManager.FindById(Id);
-            
+            var user = UserManager.FindById(Id);            
             if (user == null)
             {
                 return HttpNotFound();
             }
 
             //角色
-            var _RoleManager = this.HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
-            var selectedRoleNames = from r in _RoleManager.Roles
+            var selectedRoleNames = from r in RoleManager.Roles
                                     where r.Users.Select(u => u.UserId).Contains(user.Id)
                                     select r.Name;
 
@@ -109,8 +140,7 @@ namespace AccountBook.Areas.backend.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,Email,NickName,UserName,status,Role")] UserModel userData, string[] Role)
         {
-            var _UserManager = this.HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            var user = _UserManager.FindById(userData.Id);
+            var user = UserManager.FindById(userData.Id);
             
             if (user != null && ModelState.IsValid)
             {
@@ -119,23 +149,23 @@ namespace AccountBook.Areas.backend.Controllers
 
                 if (userData.status == UserStatus.正常)
                 {
-                    _UserManager.SetLockoutEnabled(userData.Id, false);
+                    UserManager.SetLockoutEnabled(userData.Id, false);
                 }
                 else if (userData.status == UserStatus.失效)
                 {
-                    _UserManager.SetLockoutEnabled(userData.Id, true);
-                    _UserManager.SetLockoutEndDate(userData.Id, DateTime.UtcNow.AddDays(-1));
+                    UserManager.SetLockoutEnabled(userData.Id, true);
+                    UserManager.SetLockoutEndDate(userData.Id, DateTime.UtcNow.AddDays(-1));
                 }
 
-                await _UserManager.UpdateAsync(user);
+                await UserManager.UpdateAsync(user);
 
                 //重設角色                 
-                var oldRoles = _UserManager.GetRolesAsync(userData.Id);
-                await _UserManager.RemoveFromRolesAsync(userData.Id, oldRoles.Result.ToArray());
+                var oldRoles = UserManager.GetRolesAsync(userData.Id);
+                await UserManager.RemoveFromRolesAsync(userData.Id, oldRoles.Result.ToArray());
 
                 foreach (var r in Role)
                 {
-                    await _UserManager.AddToRoleAsync(userData.Id, r);
+                    await UserManager.AddToRoleAsync(userData.Id, r);
                 }                
 
                 return RedirectToAction("Index");
